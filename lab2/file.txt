@@ -1,0 +1,22 @@
+cd lab2/src/swap
+gcc -o swap main.c swap.h swap.c
+./swap
+
+gcc -o revert main.c revert_string.c
+./revert
+
+cd oslab2019/lab2/src
+gcc -c revert_string/main.c -o bin/main.o
+gcc -c revert_string/revert_string.c -o bin/static/revert_string.o
+gcc -c -fPIC revert_string/revert_string.c -o bin/shared/revert_string.o
+ar rcs bin/static/librevert.a bin/static/revert_string.o
+gcc bin/main.o -Lbin/static -lrevert -o bin/statically-linked
+./bin/statically-linked qwe
+
+gcc -shared bin/shared/revert_string.o -o bin/shared/librevert.so
+gcc bin/main.o -Lbin/shared -lrevert -o bin/use-shared-library
+
+LD_LIBRARY_PATH=$(pwd)/bin/shared bin/use-shared-library "string"
+
+gcc -c tests/tests.c -o tests/tests.o
+gcc tests/tests.o -lcunit -Lbin/shared -lrevert -o test
