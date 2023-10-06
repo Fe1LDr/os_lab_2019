@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
+#include <signal.h>
 
 #include <sys/time.h>
 #include <sys/types.h>
@@ -16,11 +16,19 @@
 #include "find_min_max.h"
 #include "utils.h"
 
+void KILLCHILD (pid_t id) {
+  kill(id, SIGKILL);
+  printf("Hello I am die");
+  int status;
+  wait(&status);
+}
+
 int main(int argc, char **argv) {
   int seed = -1;
   int array_size = -1;
   int pnum = -1;
   bool with_files = false;
+  int time = 0;
 
   while (true) {
     int current_optind = optind ? optind : 1;
@@ -29,6 +37,7 @@ int main(int argc, char **argv) {
                                       {"array_size", required_argument, 0, 0},
                                       {"pnum", required_argument, 0, 0},
                                       {"by_files", no_argument, 0, 'f'},
+                                      {"time", required_argument, 0, 0},
                                       {0, 0, 0, 0}};
 
     int option_index = 0;
@@ -69,6 +78,14 @@ int main(int argc, char **argv) {
           case 3:
             with_files = true;
             break;
+          case 4:
+            time = atoi(optarg);
+            // error handling
+            if (time <= 0) {
+              printf("pnum is a positive number\n");
+              return 1;
+            }
+            break;
 
           defalut:
             printf("Index %d is out of options\n", option_index);
@@ -97,23 +114,24 @@ int main(int argc, char **argv) {
     return 1;
   }
 
+  alarm(time);
+  sleep(time/2);
+
   int *array = malloc(sizeof(int) * array_size);
   GenerateArray(array, array_size, seed);
   int active_child_processes = 0;
-
-  for (int i = 0; i < array_size; i++)
-  {
-    printf("array[%d]: %d\n",i, array[i]);
-  }
   
-
   struct timeval start_time;
   gettimeofday(&start_time, NULL);
 
   FILE *fp;
   fp=fopen("test.txt", "w");
+
   int pipefd[2];
   pipe(pipefd);
+  pid_t kill_pid = -1;
+  int done_flag = 0;
+
   for (int i = 0; i < pnum; i++) {
     pid_t child_pid = fork();
     if (child_pid >= 0) {
@@ -133,7 +151,12 @@ int main(int argc, char **argv) {
             write(pipefd[1], &min_max.min, sizeof(min_max.min));
             //close(pipefd[1]);
         }
+        
         return 0;
+      }
+      else {
+        kill_pid = child_pid;
+        signal(SIGALRM, KILLCHILD);
       }
 
     } else {
@@ -144,7 +167,8 @@ int main(int argc, char **argv) {
   fclose(fp);
   while (active_child_processes > 0) {
     // your code here
-    wait(NULL);
+    //wait(NULL);
+    signal (SIGALRM, KILLCHILD);
     active_child_processes -= 1;
   }
 
@@ -164,7 +188,7 @@ int main(int argc, char **argv) {
       // read from pipes
       read(pipefd[0], &max, 4);
       read(pipefd[0], &min, 4);
-      printf("Max_read: %d %d\n", max, min);
+      printf("Max_read: %d Min_read: %d\n", max, min);
       //close(pipefd[0]);
 
     }

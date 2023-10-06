@@ -1,17 +1,15 @@
 CC=gcc
-CFLAGS=-I.
+CFLAGS=-I. # для подключения библиотек
 
-objects = start sequential_min_max parallel_min_max
-
-
+objects = start sequential parallel
 
 all: $(objects)
 
-sequential_min_max : utils.o find_min_max.o utils.h find_min_max.h
-	$(CC) -o sequential_min_max find_min_max.o utils.o sequential_min_max.c $(CFLAGS)
+sequential : utils.o find_min_max.o utils.h find_min_max.h
+	$(CC) -o sequential find_min_max.o utils.o sequential_min_max.c $(CFLAGS)
 
-parallel_min_max : utils.o find_min_max.o utils.h find_min_max.h
-	$(CC) -o parallel_min_max utils.o find_min_max.o parallel_min_max.c $(CFLAGS)
+parallel : utils.o find_min_max.o utils.h find_min_max.h
+	$(CC) -o parallel utils.o find_min_max.o parallel_min_max.c $(CFLAGS)
 
 start: utils.o find_min_max.o utils.h find_min_max.h
 	$(CC) -o start utils.o find_min_max.o start.c $(CFLAGS)
@@ -23,4 +21,4 @@ find_min_max.o : utils.h find_min_max.h
 	$(CC) -o find_min_max.o -c find_min_max.c $(CFLAGS)
 
 clean :
-	rm utils.o find_min_max.o sequential_min_max parallel_min_max start
+	rm utils.o find_min_max.o sequential parallel start

@@ -1,4 +1,13 @@
+gcc -o seq sequential_min_max.c find_min_max.c utils.c
+./seq
+
 gcc -o Parr parallel_min_max.c find_min_max.c utils.c
-./Parr --seed "2" --array_size "8" --pnum "4" -f
+./parralel --seed "2" --array_size "8" --pnum "4"
+
+./parallel --seed "2" --array_size "8" --pnum "4" -f
+
+make all
 ./sequential_min_max 2 8
 ./parallel_min_max --seed "2" --array_size "8" --pnum "4"
+
+./parallel_min_max --seed "2" --array_size "8" --pnum "4" --timeout 10
