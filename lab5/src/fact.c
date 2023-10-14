@@ -17,15 +17,17 @@ struct MultyArgs {
   int *array;
   int begin;
   int end;
+  int mod;
 };
 
 int Multy(const struct MultyArgs *args) {
   int sum = 1;
   // TODO: your code here 
   for(int i=args->begin;i<args->end;i++ ){
-    sum*=args->array[i];
+    if (args->array[i] % args->mod == 0) args->array[i] = 1;
+    sum*=args->array[i] % args->mod;
   }
-  printf("%d\n", sum);
+  printf("part fact  %d\n", sum);
   return sum;
 }
 
@@ -49,7 +51,7 @@ int main(int argc, char **argv) {
   while (true)
   {
     int current_optind = optind ? optind : 1;
-    static struct option options[] = {{"number", required_argument, 0, 0},
+    static struct option options[] = {{"k", required_argument, 0, 0},
                                       {"pnum", required_argument, 0, 0},
                                       {"mod", required_argument, 0, 0},
                                       {0, 0, 0, 0}};
@@ -128,6 +130,7 @@ int main(int argc, char **argv) {
     args[i].array = array;
     args[i].begin = i * k / pnum;
     args[i].end = (i + 1) * k / pnum ;
+    args[i].mod = mod;
     if (pthread_create(&threads[i], NULL, ThreadSum, (void *)&args[i])) {
       printf("Error: pthread_create failed!\n");
       return 1;
@@ -140,7 +143,8 @@ int main(int argc, char **argv) {
     pthread_join(threads[i], (void **)&sum);
     total_sum *= sum;
   }
-  printf("%d\n",total_sum);
+  if (total_sum % mod == 0) total_sum = 1;
+  printf("total fact %d\n",total_sum % mod);
 
 
 
