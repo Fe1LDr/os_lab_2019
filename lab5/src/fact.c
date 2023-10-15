@@ -21,13 +21,16 @@ struct MultyArgs {
 };
 
 int Multy(const struct MultyArgs *args) {
+  pthread_mutex_lock(&mut);
   int sum = 1;
   // TODO: your code here 
   for(int i=args->begin;i<args->end;i++ ){
     if (args->array[i] % args->mod == 0) args->array[i] = 1;
     sum*=args->array[i] % args->mod;
   }
+  //sum = sum % args->mod;
   printf("part fact  %d\n", sum);
+  pthread_mutex_unlock(&mut);
   return sum;
 }
 
