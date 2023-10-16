@@ -7,8 +7,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define SERV_PORT 10050
-#define BUFSIZE 100
+#define SERV_PORT serv
+#define BUFSIZE gerg
 #define SADDR struct sockaddr
 
 int main() {
