@@ -1,0 +1,10 @@
+cd oslab2019/lab6/src
+
+gcc -c client.c -o client.o
+gcc -c server.c -o server.o
+gcc -c multmodulo.c -o bin/static/multmodulo.o
+ar rcs bin/static/libmult.a bin/static/multmodulo.o
+
+
+gcc client.o -Lbin/static -lmult -o cli
+gcc server.o -Lbin/static -lmult -o serv

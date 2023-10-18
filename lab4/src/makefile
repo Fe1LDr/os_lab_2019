@@ -12,7 +12,10 @@ parallel : utils.o find_min_max.o ../../lab3/src/utils.h ../../lab3/src/find_min
 	$(CC) -o parallel utils.o find_min_max.o ../../lab3/src/parallel_min_max.c $(CFLAGS)
 
 psum : ../../lab3/src/utils.h utils.o
-	$(CC) -o psum utils.o parallel_sum.c -pthread $(CFLAGS)
+	$(CC) sum.o utils.o -Lbin -lsum -o psum -pthread $(CFLAGS)
+
+sum.o : 
+	$(CC) -o sum.o -c parallel_sum.c -pthread $(CFLAGS)
 
 utils.o : ../../lab3/src/utils.h
 	$(CC) -o utils.o -c ../../lab3/src/utils.c $(CFLAGS)
@@ -21,4 +24,4 @@ find_min_max.o : ../../lab3/src/utils.h ../../lab3/src/find_min_max.h
 	$(CC) -o find_min_max.o -c ../../lab3/src/find_min_max.c $(CFLAGS)
 
 clean :
-	rm process find_min_max.o utils.o psum parallel
+	rm process find_min_max.o utils.o sum.o psum parallel

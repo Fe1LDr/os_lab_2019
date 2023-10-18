@@ -5,6 +5,7 @@
 #include <getopt.h>
 
 #include "../../lab3/src/utils.h"
+#include "sumfunc.h"
 
 #include <pthread.h>
 #include <sys/time.h>
@@ -16,21 +17,6 @@ struct SumArgs {
   int begin;
   int end;
 };
-
-int Sum(const struct SumArgs *args) {
-  int sum = 0;
-  // TODO: your code here 
-  for(int i=args->begin;i<args->end;i++ ){
-    sum+=args->array[i];
-  }
-  printf("%d\n", sum);
-  return sum;
-}
-
-void *ThreadSum(void *args) {
-  struct SumArgs *sum_args = (struct SumArgs *)args;
-  return (void *)(size_t)Sum(sum_args);
-}
 
 int main(int argc, char **argv) {
   /*

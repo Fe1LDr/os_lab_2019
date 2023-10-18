@@ -24,6 +24,6 @@ client.o :
 	$(CC) -o client.o -c client.c $(CFLAGS)
 
 clean :
-	rm client server
+	rm client server client.o server.o
 	fuser -k 20001/tcp
 	fuser -k 20002/tcp

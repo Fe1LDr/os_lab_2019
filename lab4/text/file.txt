@@ -1,0 +1,9 @@
+gcc -c parallel_sum.c -o sum.o -pthread
+gcc -c sumfunc.c -o bin/sumfunc.o
+ar rcs bin/libsum.a bin/sumfunc.o
+
+gcc sum.o utils.o -Lbin -lsum -o sum -pthread
+
+./sum  --seed 1 --array_size 1 --threads_num 1
+
+$(CC) -o psum utils.o parallel_sum.c -pthread $(CFLAGS)
