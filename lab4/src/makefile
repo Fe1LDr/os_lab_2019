@@ -11,7 +11,7 @@ process_memory : process_memory.c
 parallel : utils.o find_min_max.o ../../lab3/src/utils.h ../../lab3/src/find_min_max.h
 	$(CC) -o parallel utils.o find_min_max.o ../../lab3/src/parallel_min_max.c $(CFLAGS)
 
-psum : ../../lab3/src/utils.h utils.o
+psum : ../../lab3/src/utils.h utils.o sum.o
 	$(CC) sum.o utils.o -Lbin -lsum -o psum -pthread $(CFLAGS)
 
 sum.o : 
