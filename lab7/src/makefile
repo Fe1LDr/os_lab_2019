@@ -12,10 +12,10 @@ tcp:
 	./tcpc 127.0.0.1 10050
 
 udp:
-	$(CC) -o udpc tcpclient.c -pthread $(CFALGS) -D gerg=1024 -D serv=20002
-	$(CC) -o udps tcpserver.c -pthread $(CFALGS) -D gerg=1024 -D serv=20002
+	$(CC) -o udps udpserver.c -pthread $(CFALGS) -D gerg=1024 -D serv=20002
+	$(CC) -o udpc udpclient.c -pthread $(CFALGS) -D gerg=1024 -D serv=20002
 	./udps &
-	./udpc 127.0.0.1 20002
+	./udpc 127.0.0.1:20002
 
 clean : clean_tcp clean_udp
 

@@ -34,20 +34,19 @@ int main() {
     exit(1);
   }
   printf("SERVER starts...\n");
-
+  //sleep(5);
   while (1) {
+    sleep(4);
     unsigned int len = SLEN;
-
     if ((n = recvfrom(sockfd, mesg, BUFSIZE, 0, (SADDR *)&cliaddr, &len)) < 0) {
       perror("recvfrom");
       exit(1);
     }
     mesg[n] = 0;
-
     printf("REQUEST %s      FROM %s : %d\n", mesg,
            inet_ntop(AF_INET, (void *)&cliaddr.sin_addr.s_addr, ipadr, 16),
            ntohs(cliaddr.sin_port));
-
+    //sleep(5);
     if (sendto(sockfd, mesg, n, 0, (SADDR *)&cliaddr, len) < 0) {
       perror("sendto");
       exit(1);

@@ -41,6 +41,7 @@ int main() {
   }
 
   while (1) {
+    sleep(2);
     unsigned int clilen = kSize;
 
     if ((cfd = accept(lfd, (SADDR *)&cliaddr, &clilen)) < 0) {
@@ -50,6 +51,7 @@ int main() {
     printf("connection established\n");
 
     while ((nread = read(cfd, buf, BUFSIZE)) > 0) {
+      sleep(2);
       write(1, &buf, nread);
     }
 
